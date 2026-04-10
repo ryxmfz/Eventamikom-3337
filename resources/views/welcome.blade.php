@@ -9,7 +9,7 @@
 <body class="bg-slate-50 font-sans text-slate-900">
     <nav class="bg-white/80 backdrop-blur-md shadow-sm p-4 sticky top-0 z-50 border-b border-slate-200">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <span class="text-xl font-bold text-indigo-600">EventHub.</span>
+            <span class="text-xl font-bold text-indigo-600">EventAmikom.</span>
             <div class="hidden md:flex gap-6 font-medium">
                 <a href="/" class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Home</a>
                 <a href="/profil" class="hover:text-indigo-600 transition">Profil</a>
