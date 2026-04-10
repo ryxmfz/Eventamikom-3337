@@ -25,7 +25,7 @@
             <div class="text-center max-w-3xl mx-auto">
                 <span class="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase mb-6 inline-block">Platform Event Kampus #1</span>
                 <h1 class="text-6xl font-black text-slate-900 leading-tight mb-8">Eksplorasi Kreativitas Tanpa Batas di <span class="text-indigo-600 italic">Amikom.</span></h1>
-                <p class="text-lg text-slate-500 mb-10 leading-relaxed">Jangan lewatkan momen berharga! Amikom Event Hub membantu Anda menemukan workshop, seminar, dan kompetisi terbaik untuk meningkatkan skill Anda.</p>
+                <p class="text-lg text-slate-500 mb-10 leading-relaxed">Jangan lewatkan momen berharga! Event Amikom membantu Anda menemukan workshop, seminar, dan kompetisi terbaik untuk meningkatkan skill Anda.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a href="/katalog" class="bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition duration-300">Cari Event Sekarang</a>
                     <a href="/profil" class="bg-white border-2 border-slate-200 text-slate-700 px-10 py-4 rounded-xl font-bold hover:bg-slate-50 transition duration-300">Tentang Pengembang</a>
