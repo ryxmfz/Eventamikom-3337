@@ -52,7 +52,7 @@
     </section>
 
     <footer class="mt-32 border-t border-slate-200 py-12 text-center text-slate-400 text-sm">
-        <p>© 2026 Reyhan Amin Afrizal - Tugas Pemasaram Digital</p>
+        <p>© 2026 Reyhan Amin Afrizal - Tugas Digital Bisnis</p>
     </footer>
 </body>
 </html>
