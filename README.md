@@ -1,8 +1,23 @@
-Tugas 1 <br>
-Nama : Reyhan Amin Afrizal <br>
+
+**Nama : Reyhan Amin Afrizal <br>
 Nim : 24.12.3337 <br>
-Kelas : 24S1SI05 <br>
+Kelas : 24S1SI05 <br>**
+
+Tugas 1 <br>
 Link : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
+#Link Menuju Profil https://eventamikom-3337-main-5kfpap.free.laravel.cloud/profil
+#Link Menuju Katalog https://eventamikom-3337-main-5kfpap.free.laravel.cloud/katalog
+#Link Menuju Bantuan https://eventamikom-3337-main-5kfpap.free.laravel.cloud/bantuan
+#Link Menuju Kontak https://eventamikom-3337-main-5kfpap.free.laravel.cloud/kontak
+
+
+Tugas 2 
+1. Halaman Dashboard : 
+2. Halaman Event : 
+3. Halaman Transaksi : 
+4. Halaman Beranda :
+5. Halaman Detail Event :
+6. Halaman Checkout : 
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
