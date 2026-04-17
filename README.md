@@ -11,7 +11,7 @@ Link : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
 #Link Menuju Kontak https://eventamikom-3337-main-5kfpap.free.laravel.cloud/kontak <br>
 
 
-Tugas 2 
+Tugas 2 <br> 
 1. Halaman Dashboard : 
 2. Halaman Event : 
 3. Halaman Transaksi : 
