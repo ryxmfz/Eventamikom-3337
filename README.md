@@ -5,10 +5,10 @@ Kelas : 24S1SI05 <br>**
 
 Tugas 1 <br>
 Link : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
-#Link Menuju Profil https://eventamikom-3337-main-5kfpap.free.laravel.cloud/profil
-#Link Menuju Katalog https://eventamikom-3337-main-5kfpap.free.laravel.cloud/katalog
-#Link Menuju Bantuan https://eventamikom-3337-main-5kfpap.free.laravel.cloud/bantuan
-#Link Menuju Kontak https://eventamikom-3337-main-5kfpap.free.laravel.cloud/kontak
+#Link Menuju Profil https://eventamikom-3337-main-5kfpap.free.laravel.cloud/profil <br>
+#Link Menuju Katalog https://eventamikom-3337-main-5kfpap.free.laravel.cloud/katalog <br>
+#Link Menuju Bantuan https://eventamikom-3337-main-5kfpap.free.laravel.cloud/bantuan <br>
+#Link Menuju Kontak https://eventamikom-3337-main-5kfpap.free.laravel.cloud/kontak <br>
 
 
 Tugas 2 
