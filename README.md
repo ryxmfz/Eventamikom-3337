@@ -12,12 +12,12 @@ Link : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
 
 
 Tugas 2 <br> 
-1. Halaman Dashboard : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-dashboard.html
-2. Halaman Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-events.html
-3. Halaman Transaksi : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-transactions.html
-4. Halaman Beranda : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/
-5. Halaman Detail Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event-detail.html
-6. Halaman Checkout : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout.html
+1. Halaman Dashboard : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-dashboard.html <br>
+2. Halaman Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-events.html <br>
+3. Halaman Transaksi : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-transactions.html <br>
+4. Halaman Beranda : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
+5. Halaman Detail Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event-detail.html <br>
+6. Halaman Checkout : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout.html <br>
 
 Tugas 3 <br>
 Menambahkan Database Migration dan Seeding
