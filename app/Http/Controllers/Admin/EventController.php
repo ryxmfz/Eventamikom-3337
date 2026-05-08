@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 class EventController extends Controller
 {
     public function index() {
-        // Menggunakan paginate agar sesuai dengan instruksi modul sebelumnya
         $events = Event::with('category')->latest()->paginate(10);
         return view('admin.events.index', compact('events'));
     }
@@ -30,21 +29,16 @@ class EventController extends Controller
             'location'    => 'required',
             'price'       => 'required|numeric',
             'stock'       => 'required|numeric',
-            'poster'      => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'poster'      => 'required|image|mimes:jpg,png,jpeg|max:5120', // Batas 5MB
         ]);
 
         if ($request->hasFile('poster')) {
-            // Simpan file ke folder 'posters' di disk 'public'
-            $path = $request->file('poster')->store('posters', 'public');
-            $data['poster_path'] = $path;
+            $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
-        // Hapus key 'poster' agar tidak menyebabkan error saat create()
-        // karena di database kolomnya bernama 'poster_path'
-        unset($data['poster']);
+        unset($data['poster']); // Hapus key poster agar tidak bentrok dengan database
 
         Event::create($data);
-
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil dibuat.');
     }
 
@@ -62,28 +56,22 @@ class EventController extends Controller
             'location'    => 'required',
             'price'       => 'required|numeric',
             'stock'       => 'required|numeric',
-            'poster'      => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'poster'      => 'nullable|image|mimes:jpg,png,jpeg|max:5120',
         ]);
 
         if ($request->hasFile('poster')) {
-            // Hapus poster lama jika ada
-            if ($event->poster_path) {
-                Storage::disk('public')->delete($event->poster_path);
-            }
+            if ($event->poster_path) Storage::disk('public')->delete($event->poster_path);
             $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
         unset($data['poster']);
 
         $event->update($data);
-
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui.');
     }
 
     public function destroy(Event $event) {
-        if ($event->poster_path) {
-            Storage::disk('public')->delete($event->poster_path);
-        }
+        if ($event->poster_path) Storage::disk('public')->delete($event->poster_path);
         $event->delete();
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus.');
     }
