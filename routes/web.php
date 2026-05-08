@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EventController as AdminEventController;
+// Mengubah alias agar sama persis dengan gambar
+use App\Http\Controllers\Admin\EventController as EventAdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,10 @@ Route::get('/event/1', [EventController::class, 'show'])->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+// Menggunakan gaya penulisan chaining (->) sesuai gambar
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/events', [AdminEventController::class, 'indexAdmin'])->name('events.index');
+
+    // Route Resource untuk mengelola event
+    Route::resource('events', EventAdminController::class);
 });
