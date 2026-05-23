@@ -3,9 +3,11 @@
 use App\Http\Controllers\Admin\DashboardController;
 // Mengubah alias agar sama persis dengan gambar
 use App\Http\Controllers\Admin\EventController as EventAdminController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PartnerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil', function () {
@@ -31,4 +33,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Route Resource untuk mengelola event
     Route::resource('events', EventAdminController::class);
+
+    Route::resource('categories', CategoryController::class);
+    Route::resource('partners', PartnerController::class);
 });
