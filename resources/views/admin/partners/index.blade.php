@@ -76,7 +76,10 @@
                             <td class="py-4 px-6 font-semibold text-slate-900">{{ $partner->name }}</td>
                             <td class="py-4 px-6 text-center">
                                 <div class="flex items-center justify-center gap-3">
-                                    <button onclick="openEditModal({{ $partner->id }}, '{{ $partner->name }}')"
+                                    <button type="button"
+                                        data-id="{{ $partner->id }}"
+                                        data-name="{{ $partner->name }}"
+                                        onclick="openEditModal(this)"
                                         class="text-amber-600 hover:text-amber-700 font-semibold text-xs bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition">
                                         EDIT
                                     </button>
@@ -119,7 +122,7 @@
                     class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition">
             </div>
             <div>
-                <label tensor="edit_logo" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Ganti Logo (Opsional)</label>
+                <label for="edit_logo" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Ganti Logo (Opsional)</label>
                 <input type="file" name="logo" id="edit_logo" accept="image/*"
                     class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition">
             </div>
@@ -132,10 +135,14 @@
 </div>
 
 <script>
-    function openEditModal(id, name) {
+    // PERBAIKAN: Mengambil data dari objek button HTML secara bersih & perbaikan typo class/List
+    function openEditModal(button) {
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+
         document.getElementById('editForm').action = `/admin/partners/${id}`;
         document.getElementById('edit_name').value = name;
-        document.getElementById('editModal').class/List.remove('hidden');
+        document.getElementById('editModal').classList.remove('hidden');
     }
     function closeEditModal() {
         document.getElementById('editModal').classList.add('hidden');
