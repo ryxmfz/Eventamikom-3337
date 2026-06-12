@@ -11,9 +11,7 @@ class CheckoutController extends Controller
 {
     public function create(Event $event)
     {
-
         $categories = \App\Models\Category::all();
-
         return view('checkout.create', compact('event', 'categories'));
     }
 
@@ -43,9 +41,9 @@ class CheckoutController extends Controller
             'customer_email' => $request->customer_email,
             'customer_phone' => $request->customer_phone,
             'total_price'    => $totalPrice,
-            'status'         => 'Pending', 
+            'status'         => 'Pending',
+            'snap_token'     => null,
         ]);
-
 
         return redirect('/');
     }
