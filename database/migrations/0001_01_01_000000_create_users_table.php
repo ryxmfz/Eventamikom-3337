@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('user');
+
+            // PERUBAHAN DI SINI: Mengubah string menjadi enum
+            $table->enum('role', ['user', 'admin'])->default('user');
+
             $table->rememberToken();
             $table->timestamps();
         });
