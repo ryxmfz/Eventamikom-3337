@@ -10,55 +10,60 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // --- RUTE FRONTEND ---
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// 🚀 FIXED: Diubah ke EventController agar data $events dari database sukses terkirim ke welcome.blade.php
+Route::get('/', [EventController::class, 'index'])->name('home');
+
 Route::get('/profil', function () {
-    return view('profil');
+return view('profil');
 })->name('profil');
 Route::get('/katalog', function () {
-    return view('katalog');
+return view('katalog');
 })->name('katalog');
 Route::get('/bantuan', function () {
-    return view('bantuan');
+return view('bantuan');
 })->name('bantuan');
 Route::get('/kontak', function () {
-    return view('contact');
+return view('contact');
 })->name('kontak');
 
-Route::get('/event/1', [EventController::class, 'show'])->name('events.show');
+Route::get('/event/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
-// 🚀 BARU DI PERTEMUAN 10: Jalur Antarmuka & Eksekusi Simpan Checkout Pelanggan
+// BARU DI PERTEMUAN 10: Jalur Antarmuka & Eksekusi Simpan Checkout Pelanggan
 Route::get('/checkout/{event}', [CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('/checkout/{event}', [CheckoutController::class, 'store'])->name('checkout.store');
+
+// 💳 Rute Halaman Pembayaran Midtrans Snap
+Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])->name('checkout.payment');
+
+// 🏁 FIXED: Menambahkan Rute Halaman Sukses Setelah Pembayaran Midtrans
+Route::get('/checkout/success/{order_id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 
 // --- RUTE OTENTIKASI & ADMIN ---
 
 Route::get('/login', function () {
-    return redirect()->route('admin.login');
+return redirect()->route('admin.login');
 })->name('login');
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    Route::get('/', function () {
-        return redirect()->route('admin.dashboard');
-    });
+Route::get('/', function () {
+return redirect()->route('admin.dashboard');
+});
 
+Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('login.post');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login'])->name('login.post');
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware(['auth', 'admin'])->group(function () {
 
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::middleware(['auth', 'admin'])->group(function () {
+Route::resource('events', EventAdminController::class);
 
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
 
-        Route::resource('events', EventAdminController::class);
-
-
-        Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
-
-    });
+ });
 });
