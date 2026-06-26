@@ -65,5 +65,9 @@ Route::resource('events', EventAdminController::class);
 
 Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
 
+Route::get('/success', function () {
+    return view('success');
+});
+
  });
 });
