@@ -33,6 +33,13 @@ Tugas 10 <br>
 2. Checkout 2 : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/2 <br>
 3. Laporan Transaksi : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 
+Tugas 11<br>
+1. Event 1          :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event/1 <br>
+2. Checkout 1       :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/1 <br>
+3. Payment          :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/payment/TRX-1782484043-2PFHS <br>
+4. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1782484043-2PFHS <br>
+5. Laporan Transaksi: https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
