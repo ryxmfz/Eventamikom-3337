@@ -48,7 +48,7 @@ class CheckoutController extends Controller
         // --- INTEGRASI SNAP MIDTRANS ---
 
         // Konfigurasi Kredensial Environment Midtrans
-        \Midtrans\Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY') ?? 'SB-Mid-server-uSBmZ6AEEbeXxV5w8KB6_5e6';
         \Midtrans\Config::$isProduction = false; // Mode Sandbox!
         \Midtrans\Config::$isSanitized  = true;
         \Midtrans\Config::$is3ds        = true;
