@@ -14,16 +14,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [EventController::class, 'index'])->name('home');
 
 Route::get('/profil', function () {
-return view('profil');
+    return view('profil');
 })->name('profil');
+
 Route::get('/katalog', function () {
-return view('katalog');
+    return view('katalog');
 })->name('katalog');
+
 Route::get('/bantuan', function () {
-return view('bantuan');
+    return view('bantuan');
 })->name('bantuan');
+
 Route::get('/kontak', function () {
-return view('contact');
+    return view('contact');
 })->name('kontak');
 
 Route::get('/event/{event}', [EventController::class, 'show'])->name('events.show');
@@ -36,38 +39,40 @@ Route::post('/checkout/{event}', [CheckoutController::class, 'store'])->name('ch
 // 💳 Rute Halaman Pembayaran Midtrans Snap
 Route::get('/payment/{order_id}', [CheckoutController::class, 'payment'])->name('checkout.payment');
 
-// 🏁 FIXED: Menambahkan Rute Halaman Sukses Setelah Pembayaran Midtrans
+// 🏁 FIXED: Menambahkan Rute Halaman Sukses Setelah Pembayaran Midtrans (Bisa diakses publik)
+Route::get('/success', function () {
+    return view('success');
+});
+
+// 🏁 FIXED: Menambahkan Rute Halaman Sukses dengan Parameter order_id (Opsional, sesuaikan dengan Controller)
 Route::get('/checkout/success/{order_id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 
 // --- RUTE OTENTIKASI & ADMIN ---
 
 Route::get('/login', function () {
-return redirect()->route('admin.login');
+    return redirect()->route('admin.login');
 })->name('login');
-
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-Route::get('/', function () {
-return redirect()->route('admin.dashboard');
-});
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
 
-Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('login', [AuthController::class, 'login'])->name('login.post');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth', 'admin'])->group(function () {
 
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::resource('events', EventAdminController::class);
+        Route::resource('events', EventAdminController::class);
 
-Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
+        Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
 
-Route::get('/success', function () {
-    return view('success');
-});
+        // Rute /success sudah dipindahkan ke atas agar tidak menjadi /admin/success
 
- });
+    });
 });
