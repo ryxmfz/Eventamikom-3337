@@ -4,6 +4,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController as EventAdminController;
 use App\Http\Controllers\Admin\TransactionController as TransactionAdminController;
+// Import Controller Kategori & Partner Admin yang baru dibuat
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
@@ -50,6 +53,7 @@ Route::get('/checkout/success/{order_id}', [CheckoutController::class, 'success'
 //Route : Untuk Webhook Callback Midtrans
 Route::post('/midtrans/callback', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
 
+
 // --- RUTE OTENTIKASI & ADMIN ---
 
 Route::get('/login', function () {
@@ -68,13 +72,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('events', EventAdminController::class);
+        Route::resource('events', EventAdminController::class);
 
-    Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
+        Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
 
+        // ✨ BARU: Rute Modul Kategori (Otomatis menjadi admin.categories.index, dst)
+        Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+        Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
+        // ✨ BARU: Rute Modul Partner (Otomatis menjadi admin.partners.index, dst)
+        Route::get('partners', [PartnerController::class, 'index'])->name('partners.index');
+        Route::post('partners', [PartnerController::class, 'store'])->name('partners.store');
+        Route::put('partners/{id}', [PartnerController::class, 'update'])->name('partners.update');
+        Route::delete('partners/{id}', [PartnerController::class, 'destroy'])->name('partners.destroy');
 
     });
 });

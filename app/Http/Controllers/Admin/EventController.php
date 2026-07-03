@@ -29,7 +29,7 @@ class EventController extends Controller
             'location'    => 'required',
             'price'       => 'required|numeric',
             'stock'       => 'required|numeric',
-            'poster'      => 'required|image|mimes:jpg,png,jpeg|max:5120', // Batas 5MB
+            'poster'      => 'required|image|mimes:jpg,png,jpeg|max:20480',
         ]);
 
         if ($request->hasFile('poster')) {
@@ -56,7 +56,7 @@ class EventController extends Controller
             'location'    => 'required',
             'price'       => 'required|numeric',
             'stock'       => 'required|numeric',
-            'poster'      => 'nullable|image|mimes:jpg,png,jpeg|max:5120',
+            'poster'      => 'nullable|image|mimes:jpg,png,jpeg|max:20480',
         ]);
 
         if ($request->hasFile('poster')) {

@@ -28,6 +28,16 @@
             <a href="{{ route('admin.transactions.index') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.transactions.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
                 Laporan Transaksi
             </a>
+
+            {{-- ✨ BARU: Menu Kelola Kategori (Otomatis Aktif jika membuka route categories) ✨ --}}
+            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.categories.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
+                Kelola Kategori
+            </a>
+
+            {{-- ✨ BARU: Menu Kelola Partner (Otomatis Aktif jika membuka route partners) ✨ --}}
+            <a href="{{ route('admin.partners.index') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.partners.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
+                Kelola Partner
+            </a>
         </nav>
 
         <div class="pt-6 border-t border-indigo-800">

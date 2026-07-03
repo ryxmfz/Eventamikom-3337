@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- ================= HERO SECTION ================= --}}
     <section class="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
         <div class="flex-1 space-y-8">
             <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-bold uppercase tracking-wider">
@@ -42,6 +43,21 @@
         </div>
     </section>
 
+    {{-- ================= JELAJAHI KATEGORI SECTION (Soal 4) ================= --}}
+    <section class="max-w-7xl mx-auto px-6 py-10 border-t border-b border-slate-100">
+        <h3 class="text-xl font-extrabold text-slate-800 mb-6 text-center md:text-left">
+            Jelajahi Kategori Event
+        </h3>
+        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+            @foreach($categories as $category)
+                <span class="px-5 py-3 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 rounded-2xl font-bold text-sm transition-all shadow-xs cursor-pointer">
+                    {{ $category->name }}
+                </span>
+            @endforeach
+        </div>
+    </section>
+
+    {{-- ================= EVENTS LIST SECTION ================= --}}
     <section id="events" class="max-w-7xl mx-auto px-6 py-20">
         <div class="flex justify-between items-end mb-12">
             <div>
@@ -49,7 +65,9 @@
                 <p class="text-slate-500 font-medium">Jangan sampai ketinggalan acara seru minggu ini!</p>
             </div>
             <div class="flex gap-2">
-                <button class="p-3 border rounded-xl hover:bg-white hover:shadow-md transition">Semua Kategori</button>
+                <button class="p-3 border rounded-xl hover:bg-white hover:shadow-md transition font-bold text-sm text-slate-700">
+                    Semua Kategori
+                </button>
             </div>
         </div>
 
@@ -60,7 +78,7 @@
                     <div class="relative overflow-hidden aspect-[3/4]">
                         {{-- Deteksi Poster Gambar --}}
                         @php
-                            $posterEvent = $event->poster ?? $event->image ?? $event->gambar;
+                            $posterEvent = $event->poster ?? $event->image ?? $event->gambar ?? $event->poster_path;
 
                             // Logika penentu gambar cadangan otomatis berdasarkan kategori jika di storage kosong
                             $defaultImage = 'assets/concert.png';
@@ -97,7 +115,7 @@
                             {{-- 🎯 LINK TOMBOL DETAIL OTOMATIS BERUBAH SESUAI ID EVENT --}}
                             <a href="{{ route('events.show', $event->id) }}"
                                class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
-                               Lihat Detail
+                                Lihat Detail
                             </a>
                         </div>
                     </div>
@@ -107,6 +125,28 @@
                     Belum ada data event aktif yang tersedia saat ini.
                 </div>
             @endforelse
+        </div>
+    </section>
+
+    {{-- ================= OFFICIAL PARTNERS SECTION (Soal 4) ================= --}}
+    <section class="bg-slate-50 border-t border-slate-100 py-16 w-full">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-center text-xs font-bold uppercase tracking-wider text-slate-400 mb-8">
+                Partner Resmi yang Mendukung AmikomEventHub
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center">
+                @foreach($partners as $partner)
+                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-2xs flex flex-col items-center justify-center w-full h-28 hover:scale-105 transition-transform duration-300">
+                        {{-- 🛠️ FIXED: Sekarang membaca file local upload menggunakan asset('storage/...') atau link URL lama secara cerdas --}}
+                        <img src="{{ str_starts_with($partner->logo_url, 'http') ? $partner->logo_url : asset('storage/' . $partner->logo_url) }}"
+                             alt="Logo {{ $partner->name }}"
+                             class="max-h-12 max-w-full object-contain mb-2">
+                        <span class="text-xs text-slate-400 font-medium truncate w-full text-center px-2">
+                            {{ $partner->name }}
+                        </span>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </section>
 @endsection

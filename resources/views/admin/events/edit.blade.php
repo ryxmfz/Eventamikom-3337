@@ -1,14 +1,27 @@
 @extends('layouts.admin', ['title' => 'Edit Event'])
 
-
 @section('content')
 <header class="mb-10">
     <h1 class="text-3xl font-black text-slate-800">Edit Event</h1>
     <p class="text-slate-500 font-medium">Perbarui informasi event <span class="text-indigo-600">"{{ $event->title }}"</span></p>
 </header>
 
-
 <div class="bg-white rounded-[2.5rem] border border-slate-100 p-10 shadow-sm max-w-4xl">
+
+    {{-- 🛑 ✨ BARU: KOTAK DETEKSI ERROR VALIDASI LARAVEL ✨ 🛑 --}}
+    @if ($errors->any())
+        <div class="bg-rose-50 border border-rose-200 text-rose-700 px-6 py-4 rounded-2xl mb-6 shadow-sm">
+            <p class="font-bold mb-2 flex items-center gap-2 text-sm text-rose-800">
+                ⚠️ Gagal Menyimpan! Silakan perbaiki kesalahan berikut:
+            </p>
+            <ul class="list-disc list-inside text-xs font-semibold space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('admin.events.update', $event->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
@@ -19,7 +32,6 @@
                 <input type="text" name="title" value="{{ old('title', $event->title) }}"
                     class="w-full px-5 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition" required>
             </div>
-
 
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">Kategori</label>
@@ -32,53 +44,47 @@
                 </select>
             </div>
 
-
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">Tanggal & Waktu</label>
                 <input type="datetime-local" name="date" value="{{ old('date', date('Y-m-d\TH:i', strtotime($event->date))) }}"
                     class="w-full px-5 py-3 rounded-xl border border-slate-200 outline-none" required>
             </div>
 
-
             <div class="col-span-2">
                 <label class="block text-sm font-bold text-slate-700 mb-2">Deskripsi</label>
                 <textarea name="description" rows="4" class="w-full px-5 py-3 rounded-xl border border-slate-200 outline-none" required>{{ old('description', $event->description) }}</textarea>
             </div>
-
 
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">Harga (Rp)</label>
                 <input type="number" name="price" value="{{ old('price', $event->price) }}" class="w-full px-5 py-3 rounded-xl border border-slate-200 outline-none" required>
             </div>
 
-
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">Stok Tiket</label>
                 <input type="number" name="stock" value="{{ old('stock', $event->stock) }}" class="w-full px-5 py-3 rounded-xl border border-slate-200 outline-none" required>
             </div>
-
 
             <div class="col-span-2">
                 <label class="block text-sm font-bold text-slate-700 mb-2">Lokasi</label>
                 <input type="text" name="location" value="{{ old('location', $event->location) }}" class="w-full px-5 py-3 rounded-xl border border-slate-200 outline-none" required>
             </div>
 
-
             <div class="col-span-2">
                 <label class="block text-sm font-bold text-slate-700 mb-2">Poster Event</label>
                 <div class="flex items-start gap-6 p-4 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
                     <div class="shrink-0 text-center">
                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Poster Saat Ini</p>
-                        <img src="{{ asset('storage/'.$event->poster_path) }}" class="w-24 h-32 rounded-xl object-cover shadow-md border-2 border-white">
+                        {{-- 🛠️ Cerdas: Jika poster_path kosong, tampilkan gambar concert bawaan agar tidak pecah silang --}}
+                        <img id="preview-poster" src="{{ $event->poster_path ? asset('storage/'.$event->poster_path) : asset('assets/concert.png') }}" class="w-24 h-32 rounded-xl object-cover shadow-md border-2 border-white">
                     </div>
                     <div class="flex-1">
                         <p class="text-xs text-slate-500 mb-3 leading-relaxed">Pilih file baru jika ingin mengganti poster. Kosongkan jika tidak ingin mengubah gambar.</p>
-                        <input type="file" name="poster" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        <input type="file" name="poster" id="poster-input" onchange="previewImage()" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                     </div>
                 </div>
             </div>
         </div>
-
 
         <div class="flex justify-end gap-4 mt-10 pt-6 border-t border-slate-100">
             <a href="{{ route('admin.events.index') }}" class="px-6 py-3 font-bold text-slate-400 hover:text-slate-600 transition">Batal</a>
@@ -88,4 +94,19 @@
         </div>
     </form>
 </div>
+
+{{-- SCRIPT LIVE PREVIEW INSTAN --}}
+<script>
+function previewImage() {
+    const input = document.getElementById('poster-input');
+    const preview = document.getElementById('preview-poster');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 @endsection

@@ -4,9 +4,9 @@
     <main class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div class="lg:col-span-1">
             <div class="sticky top-32">
-                {{-- 🛠️ FIX POSTER: Otomatis membaca database, jika kosong memakai gambar cadangan --}}
+                {{-- 🛠️ FIX POSTER: Otomatis membaca 'poster_path' dari database hasil upload admin --}}
                 @php
-                    $posterEvent = $event->poster ?? $event->image ?? $event->gambar;
+                    $posterEvent = $event->poster_path ?? $event->poster ?? $event->image ?? $event->gambar;
                 @endphp
                 <img src="{{ $posterEvent ? asset('storage/' . $posterEvent) : asset('assets/concert.png') }}"
                      alt="{{ $event->title }}"
@@ -94,7 +94,7 @@
                         </p>
                     </div>
                     <div>
-                        {{-- TOMBOL UTAMA: Otomatis mengarah ke /checkout/1, /checkout/2, dst tergantung event --}}
+                        {{-- TOMBOL UTAMA --}}
                         @if($event->stock > 0)
                             <a href="{{ route('checkout.create', $event->id) }}"
                                 class="inline-block px-10 py-5 bg-white text-indigo-600 rounded-2xl font-black text-xl hover:scale-105 transition-transform shadow-xl">
