@@ -35,7 +35,7 @@ Tugas 10 <br>
 Tugas 11<br>
 1. Event 2          :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event/2 <br>
 2. Checkout 2       :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/2 <br>
-3. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1783068530-xiMCu <br>
+3. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1783069944-9e6rc <br>
 4. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 
 Tugas 12 <br>
