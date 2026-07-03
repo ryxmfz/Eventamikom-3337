@@ -16,8 +16,7 @@ Tugas 2 <br>
 2. Halaman Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-events.html <br>
 3. Halaman Transaksi : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin-transactions.html <br>
 4. Halaman Beranda : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/ <br>
-5. Halaman Detail Event : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event-detail.html <br>
-6. Halaman Checkout : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout.html <br>
+
 
 Tugas 3 <br>
 Menambahkan Database Migration dan Seeding
@@ -36,13 +35,13 @@ Tugas 10 <br>
 Tugas 11<br>
 1. Event 2          :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/event/2 <br>
 2. Checkout 2       :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/2 <br>
-3. Payment          :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/payment/TRX-1782486442-ZOVEH <br>
-4. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1782486254-IhScr <br>
-5. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
+3. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1783068530-xiMCu <br>
+4. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 
 Tugas 12 <br>
 1. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 2. Dashboard : https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/dashboard <br>
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
