@@ -47,6 +47,8 @@ Route::get('/success', function () {
 // 🏁 FIXED: Menambahkan Rute Halaman Sukses dengan Parameter order_id (Opsional, sesuaikan dengan Controller)
 Route::get('/checkout/success/{order_id}', [CheckoutController::class, 'success'])->name('checkout.success');
 
+//Route : Untuk Webhook Callback Midtrans
+Route::post('/midtrans/callback', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
 
 // --- RUTE OTENTIKASI & ADMIN ---
 
@@ -66,13 +68,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
 
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::resource('events', EventAdminController::class);
+    Route::resource('events', EventAdminController::class);
 
-        Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
+    Route::get('transactions', [TransactionAdminController::class, 'index'])->name('transactions.index');
 
-        // Rute /success sudah dipindahkan ke atas agar tidak menjadi /admin/success
+
 
     });
 });

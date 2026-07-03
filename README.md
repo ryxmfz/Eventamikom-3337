@@ -40,6 +40,8 @@ Tugas 11<br>
 4. Payment Success  :https://eventamikom-3337-main-5kfpap.free.laravel.cloud/checkout/success/TRX-1782486254-IhScr <br>
 5. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 
+Tugas 12 <br>
+1. Laporan Transaksi:https://eventamikom-3337-main-5kfpap.free.laravel.cloud/admin/transactions <br>
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
