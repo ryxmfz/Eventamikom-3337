@@ -16,11 +16,11 @@
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
 
-    <!-- Background Glass Decorative Blobs (Serasi dengan Landing Page) -->
+    <!-- Background Glass Decorative Blobs -->
     <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse pointer-events-none"></div>
     <div class="absolute -bottom-10 right-10 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
 
-    <div class="max-w-md w-full relative z-10">
+    <div class="max-w-md w-full relative z-10 my-8">
 
         <!-- Logo Header -->
         <div class="text-center mb-8">
@@ -65,7 +65,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">Email Address</label>
-                    <input type="email" name="email" required placeholder="admin@amikom.ac.id"
+                    <input type="email" name="email" required placeholder="nama@email.com"
                         class="w-full px-5 py-3.5 bg-white/90 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition shadow-2xs">
                 </div>
 
@@ -89,7 +89,7 @@
 
             {{-- Tombol Login Google SSO --}}
             <a href="{{ route('auth.google') }}"
-               class="w-full py-3.5 px-5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 transition shadow-2xs hover:shadow-md cursor-pointer">
+               class="w-full py-3.5 px-5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 transition shadow-2xs hover:shadow-md cursor-pointer mb-6">
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -98,6 +98,22 @@
                 </svg>
                 Continue with Google
             </a>
+
+            <!-- 🚀 PINTU PENDAFTARAN USER & ORGANIZER -->
+            <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-3">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-slate-500 font-medium">Belum punya akun?</span>
+                    <a href="{{ route('register') }}" class="font-extrabold text-indigo-600 hover:text-indigo-700 hover:underline">
+                        Daftar Akun User →
+                    </a>
+                </div>
+                <div class="border-t border-slate-200/50 pt-2 flex items-center justify-between text-xs">
+                    <span class="text-slate-500 font-medium">Ingin buat event (HIMA/UKM)?</span>
+                    <a href="{{ route('register.organizer') }}" class="font-extrabold text-amber-600 hover:text-amber-700 hover:underline">
+                        Daftar Organizer 🚀
+                    </a>
+                </div>
+            </div>
 
             <!-- Link Kembali ke Beranda -->
             <div class="mt-6 text-center">

@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\TransactionController as TransactionAdminControll
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\OrganizerApprovalController;
-use App\Http\Controllers\Admin\CheckInController; // 👈 1. Import Controller Scanner
+use App\Http\Controllers\Admin\CheckInController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
@@ -56,17 +56,22 @@ Route::get('/checkout/success/{order_id}', [CheckoutController::class, 'success'
 Route::post('/midtrans/callback', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
 
 
-// --- 💬 RUTE ULASAN & PROFIL PENYELENGGARA (SOAL 1 BAGIAN 2) ---
-// Route Simpan Ulasan (Perlu Auth User Biasa)
+// --- 💬 RUTE ULASAN & PROFIL PENYELENGGARA ---
 Route::post('/event/{event_id}/review', [ReviewController::class, 'store'])->middleware('auth')->name('review.store');
-
-// Route Halaman Profil Penyelenggara (Dapat Diakses Publik / Pembeli)
 Route::get('/organizer/{id}', [OrganizerController::class, 'show'])->name('organizer.show');
 
 
 // --- 🔑 RUTE OTENTIKASI GOOGLE SSO ---
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+// --- 📝 RUTE REGISTRASI MANDIRI (USER & ORGANIZER) ---
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
+
+Route::get('/register-organizer', [AuthController::class, 'showOrganizerRegister'])->name('register.organizer');
+Route::post('/register-organizer', [AuthController::class, 'storeOrganizerRegister'])->name('register.organizer.store');
 
 
 // --- 🛡️ RUTE OTENTIKASI & ADMIN ---
@@ -110,7 +115,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::match(['post', 'patch'], 'organizers/{id}/approve', [OrganizerApprovalController::class, 'approve'])->name('organizers.approve');
         Route::match(['post', 'patch'], 'organizers/{id}/reject', [OrganizerApprovalController::class, 'reject'])->name('organizers.reject');
 
-        // 📷 2. ROUTE SOAL 2: CHECK-IN QR SCANNER PANITIA
+        // 📷 ROUTE SCANNER
         Route::get('scanner', [CheckInController::class, 'index'])->name('scanner.index');
         Route::post('scanner/scan', [CheckInController::class, 'scan'])->name('scanner.scan');
 
