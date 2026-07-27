@@ -73,4 +73,21 @@ class OrganizerApprovalController extends Controller
 
         return back()->with('success', 'Penyelenggara ' . $namaPenyelenggara . ' telah ditolak/dibatasi.');
     }
+
+    // 🗑️ Superadmin Menghapus Akun Penyelenggara Secara Permanen
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // 🛡️ Proteksi Tambahan Backend: Cegah penghapusan pada akun admin/superadmin
+        if (in_array($user->role, ['admin', 'superadmin']) || $user->email === 'admin@amikom.ac.id') {
+            return back()->with('error', 'Aksi Ditolak: Superadmin tidak dapat dihapus!');
+        }
+
+        $namaPenyelenggara = $user->organization_name ?? $user->name;
+
+        $user->delete();
+
+        return back()->with('success', 'Penyelenggara ' . $namaPenyelenggara . ' BERHASIL DIHAPUS PERMANEN!');
+    }
 }

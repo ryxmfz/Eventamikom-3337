@@ -102,6 +102,16 @@
                                             Tolak (Reject)
                                         </button>
                                     </form>
+
+                                    {{-- 🗑️ Form Hapus Permanen --}}
+                                    <form action="{{ route('admin.organizers.destroy', $org->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus {{ $org->organization_name ?? $org->name }} secara permanen?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-[11px] transition shadow-xs cursor-pointer">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

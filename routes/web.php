@@ -114,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('organizers', [OrganizerApprovalController::class, 'index'])->name('organizers.index');
         Route::match(['post', 'patch'], 'organizers/{id}/approve', [OrganizerApprovalController::class, 'approve'])->name('organizers.approve');
         Route::match(['post', 'patch'], 'organizers/{id}/reject', [OrganizerApprovalController::class, 'reject'])->name('organizers.reject');
+        Route::delete('organizers/{id}', [OrganizerApprovalController::class, 'destroy'])->name('organizers.destroy'); // 👈 Rute Hapus
 
         // 📷 ROUTE SCANNER
         Route::get('scanner', [CheckInController::class, 'index'])->name('scanner.index');
