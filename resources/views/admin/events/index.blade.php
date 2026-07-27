@@ -1,6 +1,5 @@
 @extends('layouts.admin', ['title' => 'Kelola Event'])
 
-
 @section('content')
 <header class="flex justify-between items-center mb-10">
     <div>
@@ -12,7 +11,6 @@
     </a>
 </header>
 
-
 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
@@ -21,20 +19,29 @@
                     <th class="px-8 py-4">No</th>
                     <th class="px-8 py-4">Poster</th>
                     <th class="px-8 py-4">Event</th>
+                    <th class="px-8 py-4">Penyelenggara</th>
                     <th class="px-8 py-4">Harga / Stok</th>
                     <th class="px-8 py-4">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y border-t">
-                @foreach($events as $index => $event)
+                @forelse($events as $index => $event)
                 <tr class="hover:bg-slate-50/50 transition">
-                    <td class="px-8 py-6 font-bold text-slate-400">{{ $index + 1 }}</td>
+                    <td class="px-8 py-6 font-bold text-slate-400">
+                        {{ method_exists($events, 'firstItem') && $events->firstItem() ? $events->firstItem() + $index : $index + 1 }}
+                    </td>
                     <td class="px-8 py-6">
                         <img src="{{ asset('storage/'.$event->poster_path) }}" class="w-16 h-20 rounded-xl object-cover shadow-sm">
                     </td>
                     <td class="px-8 py-6">
                         <p class="font-black text-slate-800">{{ $event->title }}</p>
-                        <p class="text-xs text-slate-400">{{ $event->category->name }} • {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
+                        <p class="text-xs text-slate-400">{{ $event->category->name ?? 'Uncategorized' }} • {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
+                    </td>
+                    {{-- 🏛️ KOLOM NAMA PENYELENGGARA --}}
+                    <td class="px-8 py-6">
+                        <span class="px-3 py-1.5 bg-indigo-50 text-indigo-700 font-bold rounded-xl text-xs inline-flex items-center gap-1.5 border border-indigo-100/60">
+                            🏛️ {{ $event->user->name ?? $event->organizer->name ?? 'AMIKOM EVENT HUB' }}
+                        </span>
                     </td>
                     <td class="px-8 py-6">
                         <p class="font-bold text-indigo-600">Rp {{ number_format($event->price, 0, ',', '.') }}</p>
@@ -52,9 +59,19 @@
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="6" class="px-8 py-10 text-center text-slate-500">Belum ada event.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+
+    @if(method_exists($events, 'links'))
+    <div class="px-8 py-6 bg-slate-50/50 border-t items-center">
+        {{ $events->links() }}
+    </div>
+    @endif
 </div>
 @endsection

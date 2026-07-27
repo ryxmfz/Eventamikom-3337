@@ -3,8 +3,8 @@
 @section('content')
     <main class="max-w-3xl mx-auto px-6 py-20">
         <div class="mb-12">
-            {{-- Mengarahkan kembali ke halaman detail event --}}
-            <a href="{{ url('/event/1') }}" class="text-indigo-600 font-bold flex items-center gap-2 mb-6">
+            {{-- Mengarahkan kembali ke halaman detail event secara dinamis --}}
+            <a href="{{ route('events.show', $event->id) }}" class="text-indigo-600 font-bold flex items-center gap-2 mb-6 hover:underline">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -15,113 +15,139 @@
         </div>
 
         <div class="grid grid-cols-1 gap-8">
+            {{-- Ringkasan Pesanan --}}
             <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
                 <h3 class="text-xl font-bold mb-6 border-b pb-4">Pesanan Anda</h3>
                 <div class="flex gap-6 items-start">
-                    {{-- Menggunakan helper asset() untuk memanggil gambar dari folder public --}}
-                    <img src="{{ asset('assets/concert.png') }}" alt="Event" class="w-24 h-24 rounded-2xl object-cover">
+                    {{-- Poster Event Dinamis --}}
+                    @php
+                        $posterEvent = $event->poster_path ?? $event->poster ?? $event->image ?? $event->gambar;
+                    @endphp
+                    <img src="{{ $posterEvent ? asset('storage/' . $posterEvent) : asset('assets/concert.png') }}"
+                         alt="{{ $event->title }}"
+                         class="w-24 h-24 rounded-2xl object-cover border border-slate-100">
                     <div>
-                        <h4 class="font-extrabold text-lg">Jazz Night 2024: A Celebration</h4>
-                        <p class="text-slate-500">16 Nov 2024 • The Blue Note Lounge</p>
-                        <p class="text-indigo-600 font-bold mt-2">1 x Rp 150.000</p>
+                        <h4 class="font-extrabold text-lg text-slate-800">{{ $event->title }}</h4>
+                        <p class="text-slate-500 text-sm mt-1">{{ $event->date }} • {{ $event->location }}</p>
+                        <p class="text-indigo-600 font-bold mt-2">1 x Rp {{ number_format($event->price, 0, ',', '.') }}</p>
                     </div>
                 </div>
+
+                {{-- Rincian Harga --}}
                 <div class="mt-8 pt-6 border-t space-y-3">
-                    <div class="flex justify-between text-slate-500">
+                    <div class="flex justify-between text-slate-500 font-medium">
                         <span>Harga Tiket</span>
-                        <span>Rp 150.000</span>
+                        <span>Rp {{ number_format($event->price, 0, ',', '.') }}</span>
                     </div>
-                    <div class="flex justify-between text-slate-500">
+                    <div class="flex justify-between text-slate-500 font-medium">
                         <span>Biaya Layanan</span>
-                        <span>Rp 5.000</span>
+                        <span class="text-emerald-600 font-bold">GRATIS</span>
                     </div>
-                    <div class="flex justify-between text-2xl font-black mt-4 pt-4 border-t">
+                    <div class="flex justify-between text-2xl font-black mt-4 pt-4 border-t text-slate-900">
                         <span>Total Bayar</span>
-                        <span class="text-indigo-600">Rp 155.000</span>
+                        <span class="text-indigo-600">Rp {{ number_format($event->price, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
 
+            {{-- Form Data Pemesan --}}
             <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-                <h3 class="text-xl font-bold mb-6 italic text-indigo-600 underline underline-offset-8">📦 Data Pemesan
-                    (Tanpa Login)</h3>
-                <form class="space-y-6">
+                <h3 class="text-xl font-bold mb-6 italic text-indigo-600 underline underline-offset-8">
+                    📦 Data Pemesan
+                </h3>
+                <form class="space-y-6" method="POST" action="{{ route('checkout.store', $event->id) }}">
+                    @csrf
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Nama
-                            Lengkap</label>
-                        <input type="text" placeholder="Masukkan nama sesuai identitas"
-                            class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
-                            required>
+                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                            Nama Lengkap
+                        </label>
+                        <input type="text"
+                               name="name"
+                               value="{{ Auth::check() ? Auth::user()->name : '' }}"
+                               placeholder="Masukkan nama sesuai identitas"
+                               class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
+                               required>
                     </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Email
-                                Aktif</label>
-                            <input type="email" placeholder="contoh@gmail.com"
-                                class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
-                                required>
-                            <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tighter">*E-Ticket
-                                akan dikirim ke email ini</p>
+                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                                Email Aktif
+                            </label>
+                            <input type="email"
+                                   name="email"
+                                   value="{{ Auth::check() ? Auth::user()->email : '' }}"
+                                   placeholder="contoh@gmail.com"
+                                   class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
+                                   required>
+                            <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tighter">
+                                *E-Ticket akan dikirim ke email ini
+                            </p>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">No.
-                                WhatsApp</label>
-                            <input type="tel" placeholder="08xxxxxxx"
-                                class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
-                                required>
+                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                                No. WhatsApp
+                            </label>
+                            <input type="tel"
+                                   name="phone"
+                                   placeholder="08xxxxxxx"
+                                   class="w-full px-5 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition font-medium"
+                                   required>
                         </div>
                     </div>
 
-                    <button type="button" onclick="showMidtrans()"
-                        class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 active:scale-95 transition-all">
+                    <button type="button"
+                            onclick="showMidtrans()"
+                            class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 active:scale-95 transition-all cursor-pointer">
                         Bayar Sekarang
                     </button>
-                    <p class="text-center text-xs text-slate-400">Dengan menekan tombol di atas, Anda menyetujui Syarat
-                        & Ketentuan kami.</p>
+                    <p class="text-center text-xs text-slate-400">
+                        Dengan menekan tombol di atas, Anda menyetujui Syarat & Ketentuan kami.
+                    </p>
                 </form>
             </div>
-
         </div>
     </main>
 
+    {{-- Modal Pop-up Simulasi Midtrans --}}
     <div id="midtrans-overlay"
         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl animate-bounce-in">
             <div class="bg-slate-50 p-6 flex justify-between items-center border-b">
                 <img src="https://midtrans.com/assets/img/logo-dark.png" alt="Midtrans Logo" class="h-6">
-                <button onclick="hideMidtrans()" class="p-2 hover:bg-slate-200 rounded-full">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l18 18">
-                        </path>
+                <button onclick="hideMidtrans()" class="p-2 hover:bg-slate-200 rounded-full transition">
+                    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
             <div class="p-8 text-center">
                 <p class="text-slate-500 font-medium">Total Tagihan</p>
-                <h2 class="text-3xl font-black text-indigo-700 my-2">Rp 155.000</h2>
-                <p class="text-xs text-slate-400">Order ID #TRX-99210</p>
+                <h2 class="text-3xl font-black text-indigo-700 my-2">
+                    Rp {{ number_format($event->price, 0, ',', '.') }}
+                </h2>
+                <p class="text-xs text-slate-400">Order ID #TRX-{{ rand(10000, 99999) }}</p>
 
                 <div class="mt-8 space-y-4">
-                    {{-- Mengarahkan simulasi ke halaman tiket --}}
-                    <button onclick="window.location.href='{{ url('/my-ticket') }}'"
-                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 hover:border-indigo-600 transition group">
-                        <span class="font-bold group-hover:text-indigo-600">GoPay / QRIS</span>
+                    {{-- Simulasi Mengarahkan ke halaman Tiket Saya --}}
+                    <button onclick="window.location.href='{{ route('ticket') }}'"
+                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 hover:border-indigo-600 hover:bg-indigo-50/50 transition group cursor-pointer">
+                        <span class="font-bold text-slate-700 group-hover:text-indigo-600">GoPay / QRIS</span>
                         <span class="text-indigo-400">→</span>
                     </button>
                     <button
-                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 hover:border-indigo-600 transition group opacity-50 cursor-not-allowed">
-                        <span class="font-bold">Virtual Account (BNI, BRI)</span>
+                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 opacity-50 cursor-not-allowed">
+                        <span class="font-bold text-slate-700">Virtual Account (BNI, BRI)</span>
                         <span class="text-indigo-400">→</span>
                     </button>
                     <button
-                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 hover:border-indigo-600 transition group opacity-50 cursor-not-allowed">
-                        <span class="font-bold">Kartu Debit/Kredit</span>
+                        class="w-full py-4 border-2 border-indigo-100 rounded-2xl flex justify-between items-center px-6 opacity-50 cursor-not-allowed">
+                        <span class="font-bold text-slate-700">Kartu Debit/Kredit</span>
                         <span class="text-indigo-400">→</span>
                     </button>
                 </div>
 
-                <div
-                    class="mt-12 flex items-center justify-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-widest">
+                <div class="mt-8 flex items-center justify-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-widest">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"

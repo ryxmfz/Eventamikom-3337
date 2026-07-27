@@ -31,9 +31,37 @@ class CheckoutController extends Controller
 
         // 3. Generate Kode TRX (Unik)
         $orderId = 'TRX-' . time() . '-' . Str::random(5);
+
+        // =========================================================================
+        // ⚡ FITUR SOAL 2: BYPASS TRANSAKSI EVENT GRATIS (Rp 0)
+        // =========================================================================
+        if ($event->price == 0) {
+            // A. Rekam Transaksi Langsung LUNAS (PAID) tanpa biaya admin
+            $transaction = Transaction::create([
+                'event_id'       => $event->id,
+                'order_id'       => $orderId,
+                'customer_name'  => $request->customer_name,
+                'customer_email' => $request->customer_email,
+                'customer_phone' => $request->customer_phone,
+                'total_price'    => 0,
+                'status'         => 'PAID', // Langsung Lunas tanpa Midtrans
+                'snap_token'     => null,
+            ]);
+
+            // B. Kurangi Stok Tiket Secara Real-time
+            $event->decrement('stock');
+
+            // C. Redirect Langsung ke Halaman Sukses
+            return redirect()->route('checkout.success', $transaction->order_id)
+                             ->with('success', '🎉 Berhasil! Tiket gratis Anda telah diterbitkan.');
+        }
+
+        // =========================================================================
+        // 💳 ALUR REGULER: EVENT BERBAYAR (> Rp 0) LEWAT MIDTRANS
+        // =========================================================================
         $totalPrice = $event->price + 5000; // Menambahkan biaya admin (dummy)
 
-        // 4. Merekam Transaksi ke Database (Disimpan ke dalam variabel $transaction)
+        // 4. Merekam Transaksi ke Database
         $transaction = Transaction::create([
             'event_id'       => $event->id,
             'order_id'       => $orderId,
@@ -46,10 +74,8 @@ class CheckoutController extends Controller
         ]);
 
         // --- INTEGRASI SNAP MIDTRANS ---
-
-        // Konfigurasi Kredensial Environment Midtrans
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY') ?? 'SB-Mid-server-uSBmZ6AEEbeXxV5w8KB6_5e6';
-        \Midtrans\Config::$isProduction = false; // Mode Sandbox!
+        \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized  = true;
         \Midtrans\Config::$is3ds        = true;
 
@@ -57,7 +83,6 @@ class CheckoutController extends Controller
         \Midtrans\Config::$curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
         \Midtrans\Config::$curlOptions[CURLOPT_HTTPHEADER] = [];
 
-        // Susun Paket Array Data Transaksi
         $params = [
             'transaction_details' => [
                 'order_id'     => $orderId,
@@ -71,13 +96,9 @@ class CheckoutController extends Controller
         ];
 
         try {
-            // Perintah Tembak Generate Snap Token
             $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-            // Update rekaman kita bahwa transaksi terkait sudah memiliki id token pelunasan
             $transaction->update(['snap_token' => $snapToken]);
 
-            // Redirect ke halaman antarmuka pembayaran final pelanggan
             return redirect()->route('checkout.payment', $transaction->order_id);
 
         } catch (\Exception $e) {
@@ -85,39 +106,34 @@ class CheckoutController extends Controller
         }
     }
 
-    // 💻 FUNGSI VIEW PAYMENT() SESUAI MODUL PERTEMUAN 10
     public function payment($order_id)
     {
-        // Mengambil daftar kategori untuk keperluan menu footer
         $categories = \App\Models\Category::all();
-
-        // Mengambil data transaksi berdasarkan order_id dari URL beserta relasi event-nya
         $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
 
         return view('checkout.payment', compact('transaction', 'categories'));
     }
 
-    // 🛠️ FUNGSI VIEW SUCCESS() YANG SUDAH DIBERSIHKAN DAN DIAMANKAN
     public function success($order_id)
     {
-        // Mengambil daftar kategori untuk keperluan menu footer
         $categories = \App\Models\Category::all();
-
         $transaction = Transaction::where('order_id', $order_id)->firstOrFail();
 
-        // FIXED: Menggunakan env() agar lebih aman dan rapi
+        // 🛡️ AMAN: Jika transaksi event gratis / status sudah LUNAS, tidak perlu panggil Midtrans API
+        if ($transaction->total_price == 0 || in_array(strtolower($transaction->status), ['paid', 'success'])) {
+            return view('checkout.success', compact('transaction', 'categories'));
+        }
+
         \Midtrans\Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;
 
         try {
             $midtransStatus = \Midtrans\Transaction::status($order_id);
 
-            // Hanya ubah status menjadi sukses jika Midtrans mengonfirmasi pembayaran lunas
             if (in_array($midtransStatus->transaction_status, ['capture', 'settlement'])) {
                 $transaction->update(['status' => 'success']);
             }
         } catch (\Exception $e) {
-            // Jika error (transaksi tidak ada di Midtrans, koneksi terputus), kembalikan ke beranda
             return redirect()->route('home')->with('error', 'Transaksi tidak ditemukan atau gagal diproses oleh sistem pembayaran.');
         }
 

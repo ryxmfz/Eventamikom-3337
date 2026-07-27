@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+// ✨ Tambahkan kolom Multi-Tenant (organization_name, role, organizer_status) ke atribut Fillable
+#[Fillable(['name', 'email', 'password', 'google_id', 'is_admin', 'organization_name', 'role', 'organizer_status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,5 +29,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // ✨ Relasi Tenant ke Event (Satu Organizer bisa bikin banyak Event)
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'user_id');
     }
 }

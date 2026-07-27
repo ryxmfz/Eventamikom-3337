@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('organization_name')->nullable(); // ✨ Nama Organisasi / HIMA
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            // PERUBAHAN DI SINI: Mengubah string menjadi enum
-            $table->enum('role', ['user', 'admin'])->default('user');
+            // 💡 PENTING: Menggunakan string biasa agar aman menampung 'organizer', 'superadmin', 'buyer', dll.
+            $table->string('role')->default('user');
+            $table->boolean('is_admin')->default(0);
+            $table->string('organizer_status')->nullable(); // pending, approved, rejected
 
             $table->rememberToken();
             $table->timestamps();

@@ -23,9 +23,19 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            $user = Auth::user();
 
-            return redirect()->route('admin.dashboard'); 
+            // 🎯 CEK HAK AKSES: Izinkan jika is_admin == 1 ATAU role-nya admin/organizer
+            if ($user->is_admin == 1 || in_array($user->role, ['admin', 'superadmin', 'organizer'])) {
+                $request->session()->regenerate();
+                return redirect()->route('admin.dashboard');
+            }
+
+            // Jika user biasa (buyer), logout dan kembalikan pesan eror
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'Anda tidak memiliki hak akses ke panel ini.',
+            ]);
         }
 
         return back()->withErrors([
