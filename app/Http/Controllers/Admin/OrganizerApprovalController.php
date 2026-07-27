@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 
 class OrganizerApprovalController extends Controller
 {
-    // Tampilkan daftar semua Penyelenggara/HIMA + Fitur Pencarian Dinamis
+    // Tampilkan daftar semua Penyelenggara/HIMA + Fitur Pencarian Dinamis (Kecuali Superadmin/Admin)
     public function index(Request $request)
     {
-        $query = User::where(function ($q) {
-            $q->whereIn('role', ['organizer', 'superadmin', 'admin'])
-              ->orWhereNotNull('organization_name');
-        });
+        // 🛡️ Filter: KECUALIKAN role 'admin' dan 'superadmin' dari daftar penyelenggara
+        $query = User::whereNotIn('role', ['superadmin', 'admin'])
+            ->where(function ($q) {
+                $q->where('role', 'organizer')
+                  ->orWhereNotNull('organization_name');
+            });
 
         // 🔍 Tangkap kata kunci dari form pencarian
         if ($request->filled('search')) {
@@ -35,6 +37,12 @@ class OrganizerApprovalController extends Controller
     public function approve($id)
     {
         $user = User::findOrFail($id);
+
+        // 🛡️ Proteksi Tambahan Backend: Cegah perubahan pada akun admin/superadmin
+        if (in_array($user->role, ['admin', 'superadmin'])) {
+            return back()->with('error', 'Aksi Ditolak: Status Superadmin tidak boleh diubah!');
+        }
+
         $user->update([
             'organizer_status' => 'approved',
             'is_admin'         => 1 // Berikan akses dashboard
@@ -49,6 +57,12 @@ class OrganizerApprovalController extends Controller
     public function reject($id)
     {
         $user = User::findOrFail($id);
+
+        // 🛡️ Proteksi Tambahan Backend: Cegah penolakan pada akun admin/superadmin
+        if (in_array($user->role, ['admin', 'superadmin'])) {
+            return back()->with('error', 'Aksi Ditolak: Superadmin tidak dapat ditolak/dibatasi!');
+        }
+
         $user->update([
             'organizer_status' => 'rejected',
             'is_admin'         => 0
