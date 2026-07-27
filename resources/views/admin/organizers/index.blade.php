@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Header Page & Bar Pencarian (Seragam dengan Kategori & Partner) -->
+    <!-- Header Page & Bar Pencarian -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -24,13 +24,19 @@
         </form>
     </div>
 
-    <!-- Notifikasi Alert Sukses -->
+    <!-- Notifikasi Alert Sukses & Error -->
     @if(session('success'))
         <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-xs">
             <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
             {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-xs">
+            {{ session('error') }}
         </div>
     @endif
 
@@ -49,8 +55,13 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
                     @forelse($organizers as $index => $org)
+                        {{-- 🛡️ FILTER BLADE: Skip jika akun ini milik superadmin/admin --}}
+                        @if($org->email === 'admin@amikom.ac.id' || in_array($org->role, ['admin', 'superadmin']))
+                            @continue
+                        @endif
+
                         <tr class="hover:bg-slate-50/50 transition">
-                            <td class="px-6 py-4 text-slate-400 font-semibold">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 text-slate-400 font-semibold">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 font-bold text-slate-900">
                                 {{ $org->organization_name ?? $org->name }}
                             </td>

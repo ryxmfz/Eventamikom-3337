@@ -11,8 +11,9 @@ class OrganizerApprovalController extends Controller
     // Tampilkan daftar semua Penyelenggara/HIMA + Fitur Pencarian Dinamis (Kecuali Superadmin/Admin)
     public function index(Request $request)
     {
-        // 🛡️ Filter: KECUALIKAN role 'admin' dan 'superadmin' dari daftar penyelenggara
-        $query = User::whereNotIn('role', ['superadmin', 'admin'])
+        // 🛡️ Filter Mutlak: Buang email admin utama & role superadmin/admin
+        $query = User::where('email', '!=', 'admin@amikom.ac.id')
+            ->whereNotIn('role', ['superadmin', 'admin'])
             ->where(function ($q) {
                 $q->where('role', 'organizer')
                   ->orWhereNotNull('organization_name');
@@ -39,7 +40,7 @@ class OrganizerApprovalController extends Controller
         $user = User::findOrFail($id);
 
         // 🛡️ Proteksi Tambahan Backend: Cegah perubahan pada akun admin/superadmin
-        if (in_array($user->role, ['admin', 'superadmin'])) {
+        if (in_array($user->role, ['admin', 'superadmin']) || $user->email === 'admin@amikom.ac.id') {
             return back()->with('error', 'Aksi Ditolak: Status Superadmin tidak boleh diubah!');
         }
 
@@ -59,7 +60,7 @@ class OrganizerApprovalController extends Controller
         $user = User::findOrFail($id);
 
         // 🛡️ Proteksi Tambahan Backend: Cegah penolakan pada akun admin/superadmin
-        if (in_array($user->role, ['admin', 'superadmin'])) {
+        if (in_array($user->role, ['admin', 'superadmin']) || $user->email === 'admin@amikom.ac.id') {
             return back()->with('error', 'Aksi Ditolak: Superadmin tidak dapat ditolak/dibatasi!');
         }
 
